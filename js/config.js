@@ -20,6 +20,8 @@ const CONFIG = {
   // Hero 타이핑 효과 문구
   typingPhrases: ['정용준입니다.', 'SW 개발자입니다.', '교육을 설계합니다.', '함께 성장합니다.'],
 
-  // Contact 폼이 메일 앱(mailto)으로 보낼 받는 주소
+  // Contact 폼 전송: Formspree 폼 주소 (formspree.io에서 발급, 메시지는 가입한 메일로 전달됨)
+  formspreeEndpoint: 'https://formspree.io/f/myeeeopb',
+  // 전송 실패 시 안내할 연락처
   contactEmail: 'jyj7236@gmail.com',
 };
