@@ -73,7 +73,7 @@ portfolio/
 - [x] 언어별 프로젝트 필터 (`array.filter()`)
 - [x] Hero 타이핑 효과 (`prefers-reduced-motion` 사용자는 정적 표시)
 - [x] 시스템 다크 모드 감지 (`prefers-color-scheme`, 직접 선택한 값이 있으면 그 값 우선)
-- [x] 폼 실제 전송 준비 — `config.js`의 `formspreeEndpoint`에 Formspree 주소를 넣으면 실제 전송, 비워 두면 전송 시뮬레이션
+- [ ] 폼 실제 전송(Formspree/EmailJS) — 외부 서비스에 문의 내용을 맡기지 않기 위해 사용하지 않음. 대신 검증을 통과하면 `mailto:` 링크로 방문자의 메일 앱을 열어 제목·본문이 채워진 메일을 `config.js`의 `contactEmail`(jyj7236@gmail.com)로 보내도록 구현
 
 ### 상태 UI 직접 확인하기
 
