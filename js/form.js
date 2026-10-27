@@ -86,18 +86,16 @@ const renderForm = () => {
   formStatus.classList.toggle('is-error', status === 'error');
 };
 
-// ---- 실제 전송 (Formspree 설정 시) 또는 시뮬레이션 ----
-const sendMessage = async (values) => {
-  if (!CONFIG.formspreeEndpoint) {
-    await wait(800); // 엔드포인트가 없으면 전송을 흉내만 냄
-    return;
-  }
-  const response = await fetch(CONFIG.formspreeEndpoint, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify(values),
-  });
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+// ---- 전송: mailto 링크로 방문자의 메일 앱을 열어 내용을 채워 줌 ----
+// 외부 서비스 없이 동작하며, 실제 발송은 방문자가 메일 앱에서 '보내기'를 눌러야 완료됨
+const buildMailtoUrl = ({ name, email, message }) => {
+  const subject = `[포트폴리오 문의] ${name.trim()}님의 메시지`;
+  const body = `이름: ${name.trim()}\n이메일: ${email.trim()}\n\n${message.trim()}`;
+  return `mailto:${CONFIG.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+};
+
+const sendMessage = (values) => {
+  window.location.href = buildMailtoUrl(values);
 };
 
 // ---- 이벤트 연결 ----
@@ -140,18 +138,18 @@ contactForm.addEventListener('submit', async (event) => {
     return;
   }
 
-  setFormState({ errors, touched, status: 'submitting', statusMessage: '' });
-
   try {
     const { name } = formState.values;
-    await sendMessage(formState.values);
+    sendMessage(formState.values);
+    // 메일 앱이 안 열릴 수도 있으므로 입력 내용은 지우지 않고 그대로 둠
     setFormState({
-      ...createInitialFormState(),
+      errors,
+      touched,
       status: 'success',
-      statusMessage: `감사합니다, ${name.trim()}님! 메시지가 전송되었습니다.`,
+      statusMessage: `감사합니다, ${name.trim()}님! 메일 앱에서 '보내기'를 누르면 전송이 완료됩니다. 메일 앱이 열리지 않으면 ${CONFIG.contactEmail}으로 직접 보내 주세요.`,
     });
   } catch {
-    setFormState({ status: 'error', statusMessage: '전송에 실패했어요. 잠시 후 다시 시도해 주세요.' });
+    setFormState({ status: 'error', statusMessage: `메일 앱을 열지 못했어요. ${CONFIG.contactEmail}으로 직접 보내 주세요.` });
   }
 });
 
